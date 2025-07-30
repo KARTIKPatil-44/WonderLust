@@ -135,9 +135,9 @@ app.delete(
 //   res.send("Successful testing");
 // });
 
-// app.all("*", (req, res, next) => {
-//   next(new ExpressError(400, "Page not found!"));
-// });
+app.all(/.*/, (req,res, next) => {
+  next(new ExpressError(400, "Page not found!"));
+});
 
 app.use((err, req, res, next) => {
   let { statusCode = 500, message= "Somthing went wrong!" } = err;
