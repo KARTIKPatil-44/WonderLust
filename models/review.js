@@ -1,17 +1,25 @@
+// Import Mongoose
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
+// Define the Review schema
 const reviewSchema = new Schema({
-    comment:String,
-    rating:{
-        type:Number,
-        min: 1,
-        max: 5,
+    // The comment content of the review
+    comment: String,
+
+    // The rating given by the user, must be between 1 and 5
+    rating: {
+        type: Number,
+        min: 1, // Minimum allowed value
+        max: 5, // Maximum allowed value
     },
-    createdAt:{
+
+    // Timestamp for when the review was created
+    createdAt: {
         type: Date,
-        default:Date.now(),
+        default: Date.now(), // Automatically sets the date to the current time
     },
 });
 
-module.exports = mongoose.model("Review",reviewSchema);
+// Export the Review model so it can be used in other files
+module.exports = mongoose.model("Review", reviewSchema);
