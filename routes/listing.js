@@ -4,6 +4,7 @@ const wrapAsync = require("../utils/wrapAsync.js");
 const ExpressError = require("../utils/ExpressError.js");
 const { ListingSchema } = require("../schema.js");
 const Listing = require("../models/listing.js"); // Mongoose model
+const {isLoggedIn} = require("../middleware.js")
 
 const validateListing = (req, res, next) => {
   let { error } = ListingSchema.validate(req.body);
@@ -27,7 +28,7 @@ router.get(
 );
 
 // NEW ROUTE - Form to create new listing
-router.get("/new", (req, res) => {
+router.get("/new",isLoggedIn, (req, res) => {
   res.render("listings/new.ejs");
 });
 
@@ -49,6 +50,7 @@ router.get(
 router.post(
   "/",
   validateListing,
+  isLoggedIn,
   wrapAsync(async (req, res, next) => {
     const newListing = new Listing(req.body.listing);
     await newListing.save();
@@ -60,6 +62,7 @@ router.post(
 // EDIT ROUTE - Form to edit an existing listing
 router.get(
   "/:id/edit",
+  isLoggedIn,
   wrapAsync(async (req, res) => {
     let { id } = req.params;
     const listing = await Listing.findById(id);
@@ -74,6 +77,7 @@ router.get(
 // UPDATE ROUTE - Update listing details
 router.put(
   "/:id",
+  isLoggedIn,
   validateListing,
   wrapAsync(async (req, res) => {
     let { id } = req.params;
@@ -87,6 +91,7 @@ router.put(
 // DELETE ROUTE - Delete a listing
 router.delete(
   "/:id",
+  isLoggedIn,
   wrapAsync(async (req, res) => {
     let { id } = req.params;
     const deletedListing = await Listing.findByIdAndDelete(id);

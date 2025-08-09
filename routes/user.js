@@ -67,5 +67,15 @@ router.post(
   }
 );
 
+router.get("/logout",(req,res,next)=>{
+  req.logout((err)=>{
+    if(err){
+      return next(err);
+    }
+    req.flash("success", "you are logged out");
+    res.redirect("/listings");
+  });
+});
+
 // Exporting router to be used in app.js
 module.exports = router;
