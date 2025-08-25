@@ -3,6 +3,8 @@ const mbxGeocoding = require("@mapbox/mapbox-sdk/services/geocoding");
 const mapToken = process.env.MAP_TOKEN;
 // Only create the client if a token is available to avoid runtime error
 const geocodingClient = mapToken ? mbxGeocoding({ accessToken: mapToken }) : null;
+const path = require('path');
+const fs = require('fs');
 
 // ------------------ CONTROLLERS ------------------
 
@@ -56,24 +58,32 @@ module.exports.createListing = async (req, res, next) => {
   const newListing = new Listing(req.body.listing);
 
   // 3) Attach image from upload
-  if (req.file && (req.file.path || req.file.filename)) {
-    // Cloudinary: req.file.path is a full URL; Local: serve from /uploads filename
-    const isCloudinary = !!(process.env.CLOUD_NAME && process.env.CLOUD_API_KEY && process.env.CLOUD_API_SECRET);
-    const imageUrl = isCloudinary
-      ? req.file.path
-      : `/uploads/${req.file.filename}`;
+  try {
+    if (req.file && (req.file.path || req.file.filename)) {
+      console.log('Processing uploaded file:', req.file);
+      // Cloudinary: req.file.path is a full URL; Local: serve from /uploads filename
+      const isCloudinary = !!(process.env.CLOUD_NAME && process.env.CLOUD_API_KEY && process.env.CLOUD_API_SECRET);
+      const imageUrl = isCloudinary
+        ? req.file.path
+        : `/uploads/${req.file.filename}`;
 
-    newListing.image = {
-      url: imageUrl,
-      filename: req.file.filename || "",
-    };
-  } else {
-    // No upload provided → placeholder
-    newListing.image = {
-      url:
-        "https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?q=80&w=1200&auto=format&fit=crop",
-      filename: "placeholder",
-    };
+      newListing.image = {
+        url: imageUrl,
+        filename: req.file.filename || "",
+      };
+      console.log('Image attached successfully:', newListing.image);
+    } else {
+      console.log('No file uploaded, using placeholder image');
+      // No upload provided → placeholder
+      newListing.image = {
+        url:
+          "https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?q=80&w=1200&auto=format&fit=crop",
+        filename: "placeholder",
+      };
+    }
+  } catch (error) {
+    console.error('Error processing image upload:', error);
+    throw error;
   }
 
   // 4) Set owner
@@ -110,23 +120,85 @@ module.exports.renderEditForm = async (req, res) => {
 module.exports.updateListing = async (req, res) => {
   let { id } = req.params;
 
-  // Update listing with new data
-  let listing = await Listing.findByIdAndUpdate(
-    id,
-    { ...req.body.listing },
-    { new: true } // return updated listing
-  );
-
-  // If new image uploaded, update image too
-  if (req.file && (req.file.path || req.file.filename)) {
-    const isCloudinary = !!(process.env.CLOUD_NAME && process.env.CLOUD_API_KEY && process.env.CLOUD_API_SECRET);
-    const imageUrl = isCloudinary ? req.file.path : `/uploads/${req.file.filename}`;
-    listing.image = {
-      url: imageUrl,
-      filename: req.file.filename || "",
-    };
-    await listing.save();
+  // 1) Try to geocode new location if it changed
+  let geometry = null;
+  if (req.body.listing.location) {
+    try {
+      if (process.env.MAP_TOKEN) {
+        const response = await geocodingClient
+          .forwardGeocode({
+            query: req.body.listing.location,
+            limit: 1
+          })
+          .send();
+        if (
+          response &&
+          response.body &&
+          Array.isArray(response.body.features) &&
+          response.body.features.length > 0
+        ) {
+          geometry = response.body.features[0].geometry;
+        }
+      }
+    } catch (e) {
+      console.error("Geocoding failed:", e.message);
+    }
   }
+
+  // 2) Update listing with new data
+  let listing = await Listing.findById(id);
+  if (!listing) {
+    req.flash("error", "Listing not found");
+    return res.redirect("/listings");
+  }
+
+  // Update basic fields
+  Object.assign(listing, req.body.listing);
+
+  // Update geometry if we got new coordinates
+  if (geometry) {
+    listing.geometry = geometry;
+  } else if (req.body.listing.location !== listing.location) {
+    // If location changed but geocoding failed, use default coordinates
+    listing.geometry = { type: "Point", coordinates: [0, 0] };
+  }
+
+  // 3) If new image uploaded, update image too
+  try {
+    if (req.file) {
+      console.log('Processing updated file:', req.file);
+      const isCloudinary = !!(process.env.CLOUD_NAME && process.env.CLOUD_API_KEY && process.env.CLOUD_API_SECRET);
+      
+      // Delete old image file if it exists (for local storage)
+      if (!isCloudinary && listing.image && listing.image.filename) {
+        const oldImagePath = path.join(__dirname, '../public/uploads', listing.image.filename);
+        if (fs.existsSync(oldImagePath)) {
+          try {
+            fs.unlinkSync(oldImagePath);
+          } catch (err) {
+            console.error('Error deleting old image:', err);
+            // Continue even if delete fails
+          }
+        }
+      }
+      
+      // Update with new image
+      const imageUrl = isCloudinary ? req.file.path : `/uploads/${req.file.filename}`;
+      listing.image = {
+        url: imageUrl,
+        filename: req.file.filename || ""
+      };
+      console.log('Updated image attached successfully:', listing.image);
+      listing.markModified('image');
+    }
+  } catch (error) {
+    console.error('Error processing image update:', error);
+    req.flash('error', 'Failed to process image upload: ' + error.message);
+    return res.redirect(`/listings/${id}/edit`);
+  }
+
+  // 4) Save all changes
+  await listing.save();
 
   req.flash("success", "Listing updated!");
   res.redirect(`/listings/${listing._id}`);

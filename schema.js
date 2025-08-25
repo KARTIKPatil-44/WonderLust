@@ -1,5 +1,4 @@
 const Joi = require("joi");
-const review = require("./models/review");
 
 module.exports.ListingSchema = Joi.object({
   listing: Joi.object({
@@ -9,7 +8,10 @@ module.exports.ListingSchema = Joi.object({
     country: Joi.string().trim().required(),
     price: Joi.number().required().min(0),
     category: Joi.string().trim().required(),
-    image: Joi.string().uri().allow("", null), 
+    image: Joi.object({
+      filename: Joi.string(),
+      url: Joi.string().required(),
+    })
   }).required(),
 });
 

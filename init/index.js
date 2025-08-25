@@ -1,8 +1,6 @@
 
 // Load environment variables from project root
-const path = require('path');
-require("dotenv").config({ path: path.join(__dirname, '../.env') });
-
+require("dotenv").config();
 //  Check if MAP_TOKEN loaded properly
 console.log("Loaded MAP_TOKEN:", process.env.MAP_TOKEN);
 
@@ -16,8 +14,6 @@ const mapToken = process.env.MAP_TOKEN;
 if (!mapToken) {
   throw new Error("MAP_TOKEN is missing. Please set it in your .env file.");
 }
-
-const { query } = require("express");
 const geocodingClient = mbxGeocoding({ accessToken: mapToken });
 
 const MONGO_URL = "mongodb://127.0.0.1:27017/wonderlust";

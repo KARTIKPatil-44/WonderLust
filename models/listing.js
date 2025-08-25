@@ -1,8 +1,6 @@
 // Import Mongoose and other required modules
 const mongoose = require("mongoose");
-const review = require("./review"); // Mongoose Review model
-const { ReviewSchema } = require("../schema"); // (Optional) Joi schema for validation (not used directly here)
-const { required } = require("joi");
+const Review = require("./review"); // Mongoose Review model
 const Schema = mongoose.Schema;
 
 // Define the Listing schema
@@ -69,7 +67,7 @@ const ListingSchema = new Schema({
 // It removes all reviews associated with the deleted listing
 ListingSchema.post("findOneAndDelete", async (listing) => {
   if (listing) {
-    await review.deleteMany({ _id: { $in: listing.reviews } }); // delete all reviews in the array
+    await Review.deleteMany({ _id: { $in: listing.reviews } }); // delete all reviews in the array
   }
 });
 

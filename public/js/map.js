@@ -32,7 +32,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 container: "map",
                 style: "mapbox://styles/mapbox/streets-v12",
                 center: fallbackCoords,
-                zoom: 16,
+                zoom: 14, // Increased zoom level for better detail visibility
             });
 
             map.addControl(new mapboxgl.NavigationControl());
@@ -68,7 +68,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 container: "map",
                 style: "mapbox://styles/mapbox/streets-v12",
                 center: coords,
-                zoom: 16,
+                zoom: 14, // Increased zoom level for better detail visibility
             });
 
             // Add navigation controls

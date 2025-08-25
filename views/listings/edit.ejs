@@ -3,7 +3,8 @@
         <div class="col-8 offset-2">
             <h3>Edit your Listings</h3>
             <form method="POST" action="/listings/<%=listing._id %>?_method=PUT" novalidate class="needs-validation"
-                enctype="multipart/form-data">
+                    enctype="multipart/form-data" id="editForm">
+
                 <div>
                     <label for="title" class="form-label">Title</label>
                     <input type="text" name="listing[title]" value="<%= listing.title %>" class="form-control" required>
@@ -198,7 +199,7 @@
                 <div class="row">
                     <div class="mb-3 col-md-4">
                         <label for="price" class="form-label">Price</label>
-                        <input type="text" name="listing[price]" value="<%= listing.price %>" class="form-control"
+                        <input type="number" name="listing[price]" value="<%= listing.price %>" class="form-control"
                             required>
                         <div class="valid-feedback">Price looks good!</div>
                         <div class="invalid-feedback">Please enter a valid Price</div>

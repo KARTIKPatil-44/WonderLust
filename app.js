@@ -55,7 +55,8 @@ app.engine("ejs", ejsMate); // Enables layouts & partials
 // ==========================
 // Middleware Setup
 // ==========================
-app.use(express.urlencoded({ extended: true })); // To parse form data
+app.use(express.json({limit: '50mb'})); // To parse JSON data
+app.use(express.urlencoded({ extended: true, limit: '50mb' })); // To parse form data with increased limit
 app.use(methodOverride("_method")); // To use PUT/DELETE via POST
 // Serve static assets with cache control
 app.use(express.static(path.join(__dirname, "public"), {

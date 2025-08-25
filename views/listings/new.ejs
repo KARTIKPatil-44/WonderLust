@@ -5,7 +5,7 @@
         <div class="row justify-content-center">
             <div class="new-edit-form-inp">
                 <form action="/listings" method="post" novalidate class="needs-validation"
-                    enctype="multipart/form-data">
+                    enctype="multipart/form-data" id="newForm">
                     <h3>Create a New Listing</h3>
 
                     <!-- Title -->
@@ -28,7 +28,7 @@
                     <!-- Image -->
                     <div class="mb-3">
                         <label for="image" class="form-label">Upload Listing Image (optional)</label>
-                        <input type="file" name="listing[image]" id="image" class="form-control" accept="image/png,image/jpeg">
+                        <input type="file" name="listing[image]" class="form-control">
                         <div class="form-text">If omitted, a default placeholder image will be used.</div>
                     </div>
 
@@ -164,13 +164,12 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="invalid-feedback">Choose Category</div>
                     </div>
 
                     <!-- Price -->
                     <div class="mb-3">
                         <label for="price" class="form-label">Price</label>
-                        <input type="text" placeholder="Enter price" class="form-control" name="listing[price]" id="price" required>
+                        <input type="number" placeholder="Enter price" class="form-control" name="listing[price]" id="price" required>
                         <div class="invalid-feedback">Price should be valid</div>
                     </div>
 
@@ -195,4 +194,5 @@
             </div>
         </div>
     </div>
+
 </body>
