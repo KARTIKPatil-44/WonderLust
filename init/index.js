@@ -1,41 +1,47 @@
-
-// Load environment variables from project root
+// Load environment variables
 require("dotenv").config();
-//  Check if MAP_TOKEN loaded properly
-console.log("Loaded MAP_TOKEN:", process.env.MAP_TOKEN);
 
 const mongoose = require("mongoose");
 const initData = require("./data.js");
 const Listing = require("../models/listing.js");
 const mbxGeocoding = require("@mapbox/mapbox-sdk/services/geocoding");
 
-// ✅ Use the token safely
+// ✅ Load Mapbox token
 const mapToken = process.env.MAP_TOKEN;
 if (!mapToken) {
   throw new Error("MAP_TOKEN is missing. Please set it in your .env file.");
 }
 const geocodingClient = mbxGeocoding({ accessToken: mapToken });
 
-const MONGO_URL = "mongodb://127.0.0.1:27017/wonderlust";
-
-main()
-  .then(() => {
-    console.log("Connected to DB");
-  })
-  .catch((error) => {   // ✅ Fixed: added error parameter
-    console.log("DB connection error:", error);
-  });
-
-async function main() {
-  await mongoose.connect(MONGO_URL);
+// ✅ Load MongoDB URL
+const MONGO_URL = process.env.ATLASDB_URL;
+if (!MONGO_URL) {
+  throw new Error("ATLASDB_URL is missing. Please set it in your .env file.");
 }
 
+// Connect to MongoDB
+async function main() {
+  try {
+    await mongoose.connect(MONGO_URL, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    });
+    console.log("Connected to MongoDB");
+  } catch (error) {
+    console.error("DB connection error:", error);
+    process.exit(1); // Exit if DB connection fails
+  }
+}
+
+// Initialize DB
 const initDB = async () => {
   try {
+    // Clear existing listings
     await Listing.deleteMany({});
-    const updateData = await Promise.all(
+
+    // Prepare data with geocoding
+    const updatedData = await Promise.all(
       initData.data.map(async (obj) => {
-        // Clean up the data format - remove MongoDB-specific fields
         const cleanObj = {
           title: obj.title,
           description: obj.description,
@@ -44,39 +50,39 @@ const initDB = async () => {
           location: obj.location,
           country: obj.country,
           category: obj.category,
-           owner: "68a9a5f76d0846fd32aaf280", // Use a valid user ID
-          reviews: [], // Start with empty reviews array
+          owner: "68a9a5f76d0846fd32aaf280", // Replace with a valid user ID
+          reviews: [],
         };
 
-        let response;
+        let geometry = null;
         try {
-          response = await geocodingClient
+          const response = await geocodingClient
             .forwardGeocode({
               query: `${obj.location}, ${obj.country}`,
               limit: 1,
             })
             .send();
+
+          geometry = response.body.features[0]?.geometry || null;
         } catch (error) {
           console.error(
             `Geocoding failed for ${obj.location}, ${obj.country}:`,
             error
           );
-          return { ...cleanObj, geometry: null };
         }
 
-        const geometry = response.body.features[0]?.geometry || null;
-        return {
-          ...cleanObj,
-          geometry,
-        };
+        return { ...cleanObj, geometry };
       })
     );
 
-    await Listing.insertMany(updateData);
-    console.log("data was initialized");
+    await Listing.insertMany(updatedData);
+    console.log("Database initialized successfully!");
   } catch (error) {
-    console.log("Error initializing DB", error);
+    console.error("Error initializing DB:", error);
+  } finally {
+    mongoose.connection.close();
   }
 };
 
-initDB();
+// Run the script
+main().then(() => initDB());
