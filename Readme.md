@@ -6,7 +6,7 @@ A modern travel and accommodation booking platform built with Node.js, Express, 
 
 ## 🌐 Live Demo
 
-**Visit the live application:** [https://wonderlust-travel-website-m31l.onrender.com](https://wonderlust-travel-website.onrender.com)
+**Visit the live application:** [https://wonderlust-travel-website-m31l.onrender.co](https://wonderlust-1-hlpq.onrender.com)
 
 *Experience the full functionality including user authentication, listing management, interactive maps, and review system.*
 
