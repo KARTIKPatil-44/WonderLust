@@ -1,0 +1,219 @@
+body {
+  font-family: "Plus Jakarta Sans", sans-serif !important;
+  font-weight: 400 !important;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background-color: #f8f9fa;
+}
+
+/* Responsive Breakpoints */
+@media (max-width: 768px) {
+  .navbar {
+    height: auto;
+    padding: 1rem 0;
+  }
+
+  .listing-index-img {
+    height: 12rem !important;
+  }
+
+  #map {
+    width: 100%;
+    height: 300px;
+  }
+
+  .btns {
+    flex-direction: column;
+  }
+}
+
+@media (max-width: 576px) {
+  .nav-link {
+    padding: 0.5rem !important;
+    text-align: center;
+    font-size: 0.9rem;
+  }
+
+  .show-image {
+    height: 25vh;
+  }
+
+  .add-btn, .edit-btn {
+    width: 100% !important;
+    font-size: 0.9rem;
+  }
+}
+
+/* Layout */
+.container {
+  flex: 1;
+  max-width: 100%;
+  padding: 0 15px;
+}
+
+/* Do not override Bootstrap's .row grid to keep expected column behavior */
+
+.navbar {
+  height: 5rem;
+  background-color: white;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.fa-regular {
+  color: #fe424d;
+  font-size: 2rem;
+}
+
+.nav-link {
+  color: #222222 !important;
+  margin: 0.05rem !important;
+  transition: color 0.3s ease;
+}
+
+.nav-link:hover {
+  color: #fe424d !important;
+}
+
+.explore {
+  margin-left: -1rem;
+}
+
+/* Footer */
+.f-info-links a {
+  text-decoration: none !important;
+  color: #222222 !important;
+  transition: color 0.3s ease;
+}
+.f-info-links a:hover {
+  text-decoration: underline;
+  color: #fe424d !important;
+}
+.f-info-links, .f-info-socials, .f-info-brand {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.f-info-socials i {
+  font-size: 1.2rem;
+  margin-right: 1rem;
+  transition: color 0.3s ease;
+}
+.f-info-socials i:hover {
+  color: #fe424d;
+}
+.f-info {
+  text-align: center;
+  height: 8rem;
+  background-color: #ebebeb;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  border-top: 1px solid #ddd;
+}
+
+/* Cards */
+.listing-card {
+  border: none !important;
+  margin-bottom: 2rem;
+  transition: all 0.3s ease;
+  border-radius: 15px;
+  overflow: hidden;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+
+.preview-wrap {
+  display: inline-block;
+  margin-bottom: 1rem;
+}
+.listing-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+}
+.listing-index-img {
+  height: 15rem !important;
+}
+.card-img-top {
+  border-radius: 1rem !important;
+  width: 100%;
+  object-fit: cover !important;
+  transition: transform 0.3s ease;
+}
+
+.preview-thumb {
+  max-width: 150px;
+  max-height: 150px;
+  border-radius: 8px;
+  filter: blur(1px);
+  transition: filter 0.3s ease;
+}
+
+.preview-thumb:hover {
+  filter: blur(0);
+}
+.listing-card:hover .card-img-top {
+  transform: scale(1.05);
+}
+.card-body {
+  padding: 1rem !important;
+}
+.card-text p {
+  font-weight: 400 !important;
+}
+
+.preview-caption {
+  display: block;
+  font-size: 0.8rem;
+  color: #666;
+  margin-top: 0.3rem;
+}
+.listing-link {
+  text-decoration: none;
+  color: inherit;
+}
+.listing-link:hover {
+  text-decoration: none;
+  color: inherit;
+}
+.card-img-overlay {
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+.card-img-overlay:hover {
+  opacity: 0.2;
+  background-color: white;
+}
+.show-card {
+  padding: 1rem !important;
+}
+.show-image {
+  height: 45vh;
+  border-radius: 15px;
+  object-fit: cover;
+}
+
+/* Larger image on desktops only */
+@media (min-width: 992px) {
+  .show-image {
+    height: 60vh;
+  }
+}
+
+/* Buttons */
+.add-btn, .edit-btn {
+  background-color: #fe424d !important;
+  border: none !important;
+  border-radius: 25px;
+  padding: 0.5rem 1.5rem;
+  transition: all 0.3s ease;
+}
+.add-btn:hover, .edit-btn:hover {
+  background-color: #e63946 !important;
+  transform: translateY(-2px);
+}
+.btns {
+  display: flex;
+  gap: 1rem;
+}
