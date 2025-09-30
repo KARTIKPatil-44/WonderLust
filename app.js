@@ -29,25 +29,22 @@ const userRouter = require("./routes/user.js");
 // ==========================
 // MongoDB Connection
 // ==========================
-const dbUrl =
-  process.env.ATLASDB_URL || "mongodb://127.0.0.1:27017/wonderlust";
+const dbUrl = process.env.ATLASDB_URL || "mongodb://127.0.0.1:27017/wonderlust";
 
-async function main() {
-  try {
-    await mongoose.connect(dbUrl);
-    console.log("✅ Connected to DB:", dbUrl);
-  } catch (err) {
+mongoose.connect(dbUrl)
+  .then(() => {
+    console.log("✅ Connected to MongoDB:", dbUrl);
+  })
+  .catch((err) => {
     console.error("❌ MongoDB connection error:", err);
-  }
-}
-main();
+  });
 
 // ==========================
 // View Engine & Templates Setup
 // ==========================
+app.engine("ejs", ejsMate);
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
-app.engine("ejs", ejsMate);
 
 // ==========================
 // Middleware Setup
@@ -55,17 +52,15 @@ app.engine("ejs", ejsMate);
 app.use(express.json({ limit: "50mb" }));
 app.use(express.urlencoded({ extended: true, limit: "50mb" }));
 app.use(methodOverride("_method"));
-app.use(
-  express.static(path.join(__dirname, "public"), {
-    setHeaders: (res, filePath) => {
-      if (filePath.endsWith(".css") || filePath.endsWith(".js")) {
-        res.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
-        res.setHeader("Pragma", "no-cache");
-        res.setHeader("Expires", "0");
-      }
-    },
-  })
-);
+app.use(express.static(path.join(__dirname, "public"), {
+  setHeaders: (res, filePath) => {
+    if (filePath.endsWith(".css") || filePath.endsWith(".js")) {
+      res.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
+      res.setHeader("Pragma", "no-cache");
+      res.setHeader("Expires", "0");
+    }
+  }
+}));
 
 // ==========================
 // Session & Flash Configuration
@@ -77,9 +72,7 @@ const store = MongoStore.create({
   },
   touchAfter: 24 * 3600,
 });
-store.on("error", function (e) {
-  console.log("❌ ERROR in MONGO SESSION STORE", e);
-});
+store.on("error", (e) => console.log("❌ MONGO SESSION STORE ERROR:", e));
 
 const sessionOptions = {
   store,
@@ -87,10 +80,10 @@ const sessionOptions = {
   resave: false,
   saveUninitialized: true,
   cookie: {
-    expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
-    maxAge: 7 * 24 * 60 * 60 * 1000,
     httpOnly: true,
-  },
+    maxAge: 7 * 24 * 60 * 60 * 1000, // 1 week
+    expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)
+  }
 };
 
 app.use(session(sessionOptions));
@@ -106,7 +99,7 @@ passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
 // ==========================
-// Set Flash Messages in All Templates
+// Set Flash Messages & Current User
 // ==========================
 app.use((req, res, next) => {
   res.locals.success = req.flash("success");
@@ -118,9 +111,7 @@ app.use((req, res, next) => {
 // ==========================
 // Routes
 // ==========================
-app.get("/", (req, res) => {
-  res.redirect("/listings");
-});
+app.get("/", (req, res) => res.redirect("/listings"));
 
 app.use("/listings", listingRouter);
 app.use("/listings/:id/reviews", reviewRouter);
@@ -129,15 +120,15 @@ app.use("/", userRouter);
 // ==========================
 // 404 Handler
 // ==========================
-app.all(/.*/, (req, res, next) => {
-  next(new ExpressError(400, "Page not found!"));
+app.all("*", (req, res, next) => {
+  next(new ExpressError(404, "Page not found!"));
 });
 
 // ==========================
 // Centralized Error Handler
 // ==========================
 app.use((err, req, res, next) => {
-  let { statusCode = 500, message = "Something went wrong!" } = err;
+  const { statusCode = 500, message = "Something went wrong!" } = err;
   res.status(statusCode).render("error.ejs", { message });
 });
 
