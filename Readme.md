@@ -5,8 +5,8 @@
 A modern travel and accommodation booking platform built with Node.js, Express, MongoDB, and Mapbox integration.
 
 ## 🌐 Live Demo
-
-**Visit the live application:** [https://wonderlust-travel-website-m31l.onrender.co](https://wonderlust-1-hlpq.onrender.com)
+**Visit the live application:** [https://wonderlust-travel-website-m31l.onrender.com](https://wonderlust-1-hlpq.onrender.com)
+>>>>>>> 1ce9910 (fixing SSL error)
 
 *Experience the full functionality including user authentication, listing management, interactive maps, and review system.*
 
