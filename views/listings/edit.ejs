@@ -3,7 +3,7 @@
         <div class="col-8 offset-2">
             <h3>Edit your Listings</h3>
             <form method="POST" action="/listings/<%=listing._id %>?_method=PUT" novalidate class="needs-validation"
-                    enctype="multipart/form-data" id="editForm">
+                enctype="multipart/form-data" id="editForm">
 
                 <div>
                     <label for="title" class="form-label">Title</label>
@@ -11,13 +11,15 @@
                     <div class="valid-feedback">Title looks good!</div>
                     <div class="invalid-feedback">Please enter a valid Title</div>
                 </div>
-                
+
                 <div class="mt-4 mb-3">
                     <p class="text-muted mb-0">
-                        <strong>Owned by:</strong> <i class="text-primary"><%= listing.owner ? listing.owner.username : "Unknown Owner" %></i>
+                        <strong>Owned by:</strong> <i class="text-primary">
+                            <%= listing.owner ? listing.owner.username : "Unknown Owner" %>
+                        </i>
                     </p>
                 </div>
-                
+
                 <div>
                     <label for="description" class="form-label">Description</label>
                     <textarea class="form-control" name="listing[description]"

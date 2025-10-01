@@ -21,17 +21,14 @@ const ListingSchema = new Schema({
   },
 
   // Price of the listing
-  price:{
-    type: Number
-
+  price: {
+    type: Number,
   },
 
   // Location name or address
-  location:{type:  String,
-  },
+  location: { type: String },
   // Country name
-  country:{ type:  String,
-  },
+  country: { type: String },
 
   // Array of associated review IDs (references Review model)
   reviews: [
@@ -47,7 +44,7 @@ const ListingSchema = new Schema({
   geometry: {
     type: {
       type: String,
-      enum: ['Point'],
+      enum: ["Point"],
       required: true,
     },
     coordinates: {
@@ -55,8 +52,8 @@ const ListingSchema = new Schema({
       required: true,
     },
   },
-  category:{
-    type: String
+  category: {
+    type: String,
   },
 });
 

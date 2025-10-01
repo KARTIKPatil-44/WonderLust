@@ -1,7 +1,7 @@
 <% layout("layouts/boilerplate.ejs")-%>
     <script>
         const mapToken = "<%=process.env.MAP_TOKEN%>";
-        const listing = <%- JSON.stringify(listing) %>;
+        const listing = <% - JSON.stringify(listing) %>;
         console.log('Map Token:', mapToken);
         console.log('Listing Data:', listing);
         console.log('Listing Geometry:', listing.geometry);
@@ -130,7 +130,8 @@
                     <% } %>
                         <div class="col-12 col-md-8 mx-auto mb-3 px-2">
                             <h3>Where you'll be</h3>
-                            <div id="map" style="height: 400px; width: 100%; border-radius: 10px; border: 2px solid #ddd;">
+                            <div id="map"
+                                style="height: 400px; width: 100%; border-radius: 10px; border: 2px solid #ddd;">
                             </div>
 
                             <!-- Debug information (remove this in production) -->

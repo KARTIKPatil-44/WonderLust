@@ -8,7 +8,7 @@ module.exports.isLoggedIn = (req, res, next) => {
   if (!req.isAuthenticated()) {
     req.session.redirectUrl = req.originalUrl;
     req.flash("error", "User must be logged in to Reserve");
-     return res.redirect("/login");
+    return res.redirect("/login");
   }
   next();
 };
@@ -31,15 +31,15 @@ module.exports.isOwner = async (req, res, next) => {
 };
 
 module.exports.validateListing = (req, res, next) => {
-  let {error } = ListingSchema.validate(req.bod);
-  if(error){
+  let { error } = ListingSchema.validate(req.bod);
+  if (error) {
     console.log(error);
-    let errMsg  = error.details.map((el)=> el.message).join(",");
-  throw new ExpressError(400,errMsg);
-  }else{
+    let errMsg = error.details.map((el) => el.message).join(",");
+    throw new ExpressError(400, errMsg);
+  } else {
     next();
   }
-}
+};
 module.exports.validateReview = (req, res, next) => {
   let { error } = ReviewSchema.validate(req.body);
   if (error) {

@@ -1,14 +1,14 @@
 // Importing required modules
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
-const passportLocalMongoose = require('passport-local-mongoose');
+const passportLocalMongoose = require("passport-local-mongoose");
 
 // Define the User schema
 const userSchema = new Schema({
-    email: {
-        type: String,
-        required: true, // Email is required for each user
-    },
+  email: {
+    type: String,
+    required: true, // Email is required for each user
+  },
 });
 
 // Plugin passport-local-mongoose to handle username, hash, salt, and authentication methods

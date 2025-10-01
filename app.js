@@ -31,7 +31,8 @@ const userRouter = require("./routes/user.js");
 // ==========================
 const dbUrl = process.env.ATLASDB_URL || "mongodb://127.0.0.1:27017/wonderlust";
 
-mongoose.connect(dbUrl)
+mongoose
+  .connect(dbUrl)
   .then(() => {
     console.log("✅ Connected to MongoDB:", dbUrl);
   })
@@ -52,15 +53,17 @@ app.set("views", path.join(__dirname, "views"));
 app.use(express.json({ limit: "50mb" }));
 app.use(express.urlencoded({ extended: true, limit: "50mb" }));
 app.use(methodOverride("_method"));
-app.use(express.static(path.join(__dirname, "public"), {
-  setHeaders: (res, filePath) => {
-    if (filePath.endsWith(".css") || filePath.endsWith(".js")) {
-      res.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
-      res.setHeader("Pragma", "no-cache");
-      res.setHeader("Expires", "0");
-    }
-  }
-}));
+app.use(
+  express.static(path.join(__dirname, "public"), {
+    setHeaders: (res, filePath) => {
+      if (filePath.endsWith(".css") || filePath.endsWith(".js")) {
+        res.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
+        res.setHeader("Pragma", "no-cache");
+        res.setHeader("Expires", "0");
+      }
+    },
+  })
+);
 
 // ==========================
 // Session & Flash Configuration
@@ -82,8 +85,8 @@ const sessionOptions = {
   cookie: {
     httpOnly: true,
     maxAge: 7 * 24 * 60 * 60 * 1000, // 1 week
-    expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)
-  }
+    expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
+  },
 };
 
 app.use(session(sessionOptions));

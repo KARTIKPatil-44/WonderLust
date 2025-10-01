@@ -39,7 +39,8 @@ body {
     height: 25vh;
   }
 
-  .add-btn, .edit-btn {
+  .add-btn,
+  .edit-btn {
     width: 100% !important;
     font-size: 0.9rem;
   }
@@ -57,7 +58,7 @@ body {
 .navbar {
   height: 5rem;
   background-color: white;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
 
 .fa-regular {
@@ -85,24 +86,31 @@ body {
   color: #222222 !important;
   transition: color 0.3s ease;
 }
+
 .f-info-links a:hover {
   text-decoration: underline;
   color: #fe424d !important;
 }
-.f-info-links, .f-info-socials, .f-info-brand {
+
+.f-info-links,
+.f-info-socials,
+.f-info-brand {
   width: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
 }
+
 .f-info-socials i {
   font-size: 1.2rem;
   margin-right: 1rem;
   transition: color 0.3s ease;
 }
+
 .f-info-socials i:hover {
   color: #fe424d;
 }
+
 .f-info {
   text-align: center;
   height: 8rem;
@@ -121,20 +129,23 @@ body {
   transition: all 0.3s ease;
   border-radius: 15px;
   overflow: hidden;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
 }
 
 .preview-wrap {
   display: inline-block;
   margin-bottom: 1rem;
 }
+
 .listing-card:hover {
   transform: translateY(-5px);
-  box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
 }
+
 .listing-index-img {
   height: 15rem !important;
 }
+
 .card-img-top {
   border-radius: 1rem !important;
   width: 100%;
@@ -153,12 +164,15 @@ body {
 .preview-thumb:hover {
   filter: blur(0);
 }
+
 .listing-card:hover .card-img-top {
   transform: scale(1.05);
 }
+
 .card-body {
   padding: 1rem !important;
 }
+
 .card-text p {
   font-weight: 400 !important;
 }
@@ -169,25 +183,31 @@ body {
   color: #666;
   margin-top: 0.3rem;
 }
+
 .listing-link {
   text-decoration: none;
   color: inherit;
 }
+
 .listing-link:hover {
   text-decoration: none;
   color: inherit;
 }
+
 .card-img-overlay {
   opacity: 0;
   transition: opacity 0.3s ease;
 }
+
 .card-img-overlay:hover {
   opacity: 0.2;
   background-color: white;
 }
+
 .show-card {
   padding: 1rem !important;
 }
+
 .show-image {
   height: 45vh;
   border-radius: 15px;
@@ -202,17 +222,21 @@ body {
 }
 
 /* Buttons */
-.add-btn, .edit-btn {
+.add-btn,
+.edit-btn {
   background-color: #fe424d !important;
   border: none !important;
   border-radius: 25px;
   padding: 0.5rem 1.5rem;
   transition: all 0.3s ease;
 }
-.add-btn:hover, .edit-btn:hover {
+
+.add-btn:hover,
+.edit-btn:hover {
   background-color: #e63946 !important;
   transform: translateY(-2px);
 }
+
 .btns {
   display: flex;
   gap: 1rem;

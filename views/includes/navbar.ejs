@@ -1,280 +1,356 @@
 <style>
-        .navbar {
-            background-color: white !important;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        }
+    .navbar {
+        background-color: white !important;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
 
-        .navbar-brand {
-            font-size: 1.8rem;
-            font-weight: bold;
-            color: #fe424d !important;
-        }
+    .navbar-brand {
+        font-size: 1.8rem;
+        font-weight: bold;
+        color: #fe424d !important;
+    }
 
+    .nav-search {
+        flex: 1;
+        max-width: 500px;
+        margin: 0 auto;
+    }
+
+    .search-form {
+        display: flex;
+        align-items: center;
+        background: white;
+        border: 1px solid #ddd;
+        border-radius: 25px;
+        padding: 0.5rem;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .search-input {
+        border: none;
+        outline: none;
+        flex: 1;
+        padding: 0.5rem 1rem;
+        font-size: 0.9rem;
+        background: transparent;
+    }
+
+    .search-input::placeholder {
+        color: #666;
+    }
+
+    .search-btn {
+        background-color: #fe424d;
+        color: white;
+        border: none;
+        border-radius: 20px;
+        padding: 0.5rem 1.5rem;
+        font-size: 0.9rem;
+        font-weight: 500;
+        transition: all 0.3s ease;
+    }
+
+    .search-btn:hover {
+        background-color: #e63946;
+        color: white;
+        transform: translateY(-1px);
+    }
+
+    /* Scope red styling to button dropdowns only (avoid full-width nav-link toggle) */
+    .btn.dropdown-toggle {
+        background-color: #fe424d !important;
+        border: none !important;
+        border-radius: 20px;
+        padding: 0.5rem 1rem;
+    }
+
+    .btn.dropdown-toggle:hover {
+        background-color: #e63946 !important;
+    }
+
+    .dropdown-menu {
+        border: none;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        border-radius: 10px;
+    }
+
+    .dropdown-item {
+        padding: 0.5rem 1rem;
+        color: #333;
+        transition: background-color 0.2s ease;
+    }
+
+    .dropdown-item:hover {
+        background-color: #f8f9fa;
+        color: #fe424d;
+    }
+
+    .nav-link {
+        color: #333 !important;
+        font-weight: 500;
+        transition: color 0.2s ease;
+        display: inline-flex;
+        align-items: center;
+    }
+
+    .nav-link:hover {
+        color: #fe424d !important;
+    }
+
+    @media (max-width: 768px) {
         .nav-search {
-            flex: 1;
-            max-width: 500px;
-            margin: 0 auto;
+            max-width: 100%;
+            margin: 1rem 0;
         }
 
         .search-form {
-            display: flex;
-            align-items: center;
-            background: white;
-            border: 1px solid #ddd;
-            border-radius: 25px;
-            padding: 0.5rem;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            border-radius: 15px;
         }
 
+        .navbar-nav {
+            margin-top: 1rem;
+        }
+
+        /* Prevent mobile zoom when focusing inputs */
         .search-input {
-            border: none;
-            outline: none;
-            flex: 1;
-            padding: 0.5rem 1rem;
-            font-size: 0.9rem;
-            background: transparent;
+            font-size: 16px;
         }
 
-        .search-input::placeholder {
-            color: #666;
-        }
-
-        .search-btn {
-            background-color: #fe424d;
-            color: white;
-            border: none;
-            border-radius: 20px;
-            padding: 0.5rem 1.5rem;
-            font-size: 0.9rem;
-            font-weight: 500;
-            transition: all 0.3s ease;
-        }
-
-        .search-btn:hover {
-            background-color: #e63946;
-            color: white;
-            transform: translateY(-1px);
-        }
-
-        /* Scope red styling to button dropdowns only (avoid full-width nav-link toggle) */
-        .btn.dropdown-toggle {
-            background-color: #fe424d !important;
-            border: none !important;
-            border-radius: 20px;
-            padding: 0.5rem 1rem;
-        }
-
-        .btn.dropdown-toggle:hover {
-            background-color: #e63946 !important;
-        }
-
-        .dropdown-menu {
-            border: none;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-            border-radius: 10px;
-        }
-
-        .dropdown-item {
-            padding: 0.5rem 1rem;
-            color: #333;
-            transition: background-color 0.2s ease;
-        }
-
-        .dropdown-item:hover {
-            background-color: #f8f9fa;
-            color: #fe424d;
-        }
-
-        .nav-link {
-            color: #333 !important;
-            font-weight: 500;
-            transition: color 0.2s ease;
-            display: inline-flex;
-            align-items: center;
-        }
-
-        .nav-link:hover {
-            color: #fe424d !important;
-        }
-
-        @media (max-width: 768px) {
-            .nav-search {
-                max-width: 100%;
-                margin: 1rem 0;
-            }
-            
-            .search-form {
-                border-radius: 15px;
-            }
-            
-            .navbar-nav {
-                margin-top: 1rem;
-            }
-
-            /* Prevent mobile zoom when focusing inputs */
-            .search-input {
-                font-size: 16px;
-            }
-
-            /* Mobile dropdown: stacked full-width buttons */
+        /* Mobile dropdown: stacked full-width buttons */
         .navbar-nav .dropdown-menu {
-                display: flex;
-                flex-direction: column;
-                align-items: stretch;
-                gap: .5rem;
+            display: flex;
+            flex-direction: column;
+            align-items: stretch;
+            gap: .5rem;
             padding: .75rem;
-                min-width: unset;
-                max-width: 100%;
+            min-width: unset;
+            max-width: 100%;
             border: 1px solid #e9ecef;
-            box-shadow: 0 8px 24px rgba(0,0,0,.08);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, .08);
             background: #fff;
             border-radius: 14px;
-                overflow: visible;
-                scrollbar-width: none;
-            }
-            .navbar-nav .dropdown-menu::-webkit-scrollbar { display: none; }
-            .navbar-nav .dropdown-menu li { list-style: none; }
-            .navbar-nav .dropdown-menu .dropdown-item {
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                gap: .4rem;
-                padding: .6rem 1rem;
-                border-radius: 999px;
-                background: #fe424d;
-                color: #fff;
-                white-space: nowrap;
-                width: 100%;
-            }
-            .navbar-nav .dropdown-menu .dropdown-item:hover {
-                background: #e63946;
-                color: #fff;
-            }
-            .navbar-nav .dropdown-menu .dropdown-divider,
-            .navbar-nav .dropdown-menu .dropdown-header {
-                display: none;
-            }
-
-        /* Hide user icon trigger; show the dropdown content as inline panel */
-        .user-toggle { display: none !important; }
-        .nav-item.dropdown .dropdown-menu { display: block; position: static; transform: none; margin: 0; }
+            overflow: visible;
+            scrollbar-width: none;
         }
 
-        /* Improve toggler visibility and avoid focus ring jump */
-        .navbar-toggler { border: none; }
-        .navbar-toggler:focus { box-shadow: none; }
-        .dropdown-toggle::after { display: none; }
+        .navbar-nav .dropdown-menu::-webkit-scrollbar {
+            display: none;
+        }
 
-        /* Ensure collapsed content uses full width on small screens */
-        .navbar-collapse { flex-basis: 100%; }
+        .navbar-nav .dropdown-menu li {
+            list-style: none;
+        }
 
-        /* Dropdown width and alignment */
-        .navbar-nav .dropdown-menu { min-width: 14rem; }
-        .user-toggle { padding: .5rem .75rem; }
+        .navbar-nav .dropdown-menu .dropdown-item {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: .4rem;
+            padding: .6rem 1rem;
+            border-radius: 999px;
+            background: #fe424d;
+            color: #fff;
+            white-space: nowrap;
+            width: 100%;
+        }
 
-        /* Prevent full-width red bar for nav-link dropdown toggle on collapse */
-        .navbar-nav .nav-link.dropdown-toggle { width: auto; }
+        .navbar-nav .dropdown-menu .dropdown-item:hover {
+            background: #e63946;
+            color: #fff;
+        }
 
-        /* Mobile user actions container and items */
-        .user-actions { width: 100%; display: flex; flex-direction: column; gap: .5rem; }
-        .user-actions .action { display: flex; justify-content: center; align-items: center; gap: .35rem; color: #fff; background: #fe424d; border-radius: 999px; padding: .6rem 1rem; text-decoration: none; }
-        .user-actions .action:hover { background: #e63946; color: #fff; }
-        .user-actions .action.disabled { opacity: .85; pointer-events: none; background: #adb5bd; color: #fff; }
-    </style>
+        .navbar-nav .dropdown-menu .dropdown-divider,
+        .navbar-nav .dropdown-menu .dropdown-header {
+            display: none;
+        }
 
-    <nav class="navbar navbar-expand-lg navbar-light bg-body-light border-bottom sticky-top">
-        <div class="container-fluid">
-            <a class="navbar-brand" href="/listings">
-                <i class="fa-regular fa-compass"></i> WonderLust
-            </a>
+        /* Hide user icon trigger; show the dropdown content as inline panel */
+        .user-toggle {
+            display: none !important;
+        }
 
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
+        .nav-item.dropdown .dropdown-menu {
+            display: block;
+            position: static;
+            transform: none;
+            margin: 0;
+        }
+    }
 
-            <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-                <!-- Search Box -->
-                <div class="nav-search">
-                    <form class="search-form" role="search" action="/listings/search" method="get" id="searchBox">
-                        <input class="search-input" type="search"
-                            placeholder="Search Your Destination" aria-label="Search" name="q"
-                            id="mySearchInput" />
-                        <button class="search-btn" type="submit" id="search">
-                            <i class="fa-solid fa-magnifying-glass"></i> Search
-                        </button>
-                    </form>
-                </div>
+    /* Improve toggler visibility and avoid focus ring jump */
+    .navbar-toggler {
+        border: none;
+    }
 
-                <!-- Right-side Menu -->
-                <ul class="navbar-nav ms-auto align-items-lg-center">
-                    <!-- Dropdown Menu -->
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle user-toggle" href="#" id="userMenu" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            <i class="fa-solid fa-circle-user"></i>
-                        </a>
-                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userMenu">
-                            <!-- Mobile: horizontal pill bar -->
-                            <div class="user-actions d-lg-none">
-                                <% if(!(typeof currentUser !== 'undefined' && currentUser)) { %>
-                                    <a class="action" href="/signup"><i class="fa-solid fa-user-plus"></i><span>Sign up</span></a>
-                                    <a class="action" href="/login"><i class="fa-solid fa-user-check"></i><span>Log in</span></a>
+    .navbar-toggler:focus {
+        box-shadow: none;
+    }
+
+    .dropdown-toggle::after {
+        display: none;
+    }
+
+    /* Ensure collapsed content uses full width on small screens */
+    .navbar-collapse {
+        flex-basis: 100%;
+    }
+
+    /* Dropdown width and alignment */
+    .navbar-nav .dropdown-menu {
+        min-width: 14rem;
+    }
+
+    .user-toggle {
+        padding: .5rem .75rem;
+    }
+
+    /* Prevent full-width red bar for nav-link dropdown toggle on collapse */
+    .navbar-nav .nav-link.dropdown-toggle {
+        width: auto;
+    }
+
+    /* Mobile user actions container and items */
+    .user-actions {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        gap: .5rem;
+    }
+
+    .user-actions .action {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: .35rem;
+        color: #fff;
+        background: #fe424d;
+        border-radius: 999px;
+        padding: .6rem 1rem;
+        text-decoration: none;
+    }
+
+    .user-actions .action:hover {
+        background: #e63946;
+        color: #fff;
+    }
+
+    .user-actions .action.disabled {
+        opacity: .85;
+        pointer-events: none;
+        background: #adb5bd;
+        color: #fff;
+    }
+</style>
+
+<nav class="navbar navbar-expand-lg navbar-light bg-body-light border-bottom sticky-top">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="/listings">
+            <i class="fa-regular fa-compass"></i> WonderLust
+        </a>
+
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup"
+            aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+            <!-- Search Box -->
+            <div class="nav-search">
+                <form class="search-form" role="search" action="/listings/search" method="get" id="searchBox">
+                    <input class="search-input" type="search" placeholder="Search Your Destination" aria-label="Search"
+                        name="q" id="mySearchInput" />
+                    <button class="search-btn" type="submit" id="search">
+                        <i class="fa-solid fa-magnifying-glass"></i> Search
+                    </button>
+                </form>
+            </div>
+
+            <!-- Right-side Menu -->
+            <ul class="navbar-nav ms-auto align-items-lg-center">
+                <!-- Dropdown Menu -->
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle user-toggle" href="#" id="userMenu" role="button"
+                        data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="fa-solid fa-circle-user"></i>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userMenu">
+                        <!-- Mobile: horizontal pill bar -->
+                        <div class="user-actions d-lg-none">
+                            <% if(!(typeof currentUser !=='undefined' && currentUser)) { %>
+                                <a class="action" href="/signup"><i class="fa-solid fa-user-plus"></i><span>Sign
+                                        up</span></a>
+                                <a class="action" href="/login"><i class="fa-solid fa-user-check"></i><span>Log
+                                        in</span></a>
                                 <% } %>
-                                <% if(typeof currentUser !== 'undefined' && currentUser) { %>
-                                    <span class="action disabled"><i class="fa-solid fa-user"></i><span><%= currentUser.username %></span></span>
-                                    <a class="action" href="/logout"><i class="fa-solid fa-arrow-right-from-bracket"></i><span>Log out</span></a>
-                                <% } %>
-                                <a class="action" href="/listings/new"><i class="fa-solid fa-circle-plus"></i><span>Airbnb your home</span></a>
-                            </div>
+                                    <% if(typeof currentUser !=='undefined' && currentUser) { %>
+                                        <span class="action disabled"><i class="fa-solid fa-user"></i><span>
+                                                <%= currentUser.username %>
+                                            </span></span>
+                                        <a class="action" href="/logout"><i
+                                                class="fa-solid fa-arrow-right-from-bracket"></i><span>Log
+                                                out</span></a>
+                                        <% } %>
+                                            <a class="action" href="/listings/new"><i
+                                                    class="fa-solid fa-circle-plus"></i><span>Airbnb your
+                                                    home</span></a>
+                        </div>
 
-                            <!-- Desktop: original list -->
-                            <% if(!(typeof currentUser !== 'undefined' && currentUser)) { %>
-                                <li class="d-none d-lg-block"><a class="dropdown-item" href="/signup">
+                        <!-- Desktop: original list -->
+                        <% if(!(typeof currentUser !=='undefined' && currentUser)) { %>
+                            <li class="d-none d-lg-block"><a class="dropdown-item" href="/signup">
                                     <i class="fa-solid fa-user-plus"></i>&nbsp; &nbsp;<b>Sign up</b>
                                 </a></li>
-                                <li class="d-none d-lg-block"><a class="dropdown-item" href="/login">
+                            <li class="d-none d-lg-block"><a class="dropdown-item" href="/login">
                                     <i class="fa-solid fa-user-check"></i>&nbsp; &nbsp;<b>Log in</b>
                                 </a></li>
                             <% } %>
-                            <% if(typeof currentUser !== 'undefined' && currentUser) { %>
-                                <li class="d-none d-lg-block"><h6 class="dropdown-header">
-                                    <i class="fa-solid fa-user"></i>&nbsp; &nbsp;<%= currentUser.username %>
-                                </h6></li>
-                                <li class="d-none d-lg-block"><a class="dropdown-item" href="/logout">
-                                    <i class="fa-solid fa-arrow-right-from-bracket"></i>&nbsp; &nbsp;<b>Log out</b>
-                                </a></li>
-                            <% } %>
-                            <li class="d-none d-lg-block"><hr class="dropdown-divider"></li>
-                            <li class="d-none d-lg-block"><a class="dropdown-item" href="/listings/new">
-                                <i class="fa-solid fa-circle-plus"></i>&nbsp; &nbsp;<strong>Airbnb your home</strong>
-                            </a></li>
-                        </ul>
-                    </li>
+                                <% if(typeof currentUser !=='undefined' && currentUser) { %>
+                                    <li class="d-none d-lg-block">
+                                        <h6 class="dropdown-header">
+                                            <i class="fa-solid fa-user"></i>&nbsp; &nbsp;<%= currentUser.username %>
+                                        </h6>
+                                    </li>
+                                    <li class="d-none d-lg-block"><a class="dropdown-item" href="/logout">
+                                            <i class="fa-solid fa-arrow-right-from-bracket"></i>&nbsp; &nbsp;<b>Log
+                                                out</b>
+                                        </a></li>
+                                    <% } %>
+                                        <li class="d-none d-lg-block">
+                                            <hr class="dropdown-divider">
+                                        </li>
+                                        <li class="d-none d-lg-block"><a class="dropdown-item" href="/listings/new">
+                                                <i class="fa-solid fa-circle-plus"></i>&nbsp; &nbsp;<strong>Airbnb your
+                                                    home</strong>
+                                            </a></li>
+                    </ul>
+                </li>
 
-                    <!-- Responsive Registration (visible on smaller screens) -->
-                    <div id="responsive-registration" class="d-none">
-                        <% if(!(typeof currentUser !== 'undefined' && currentUser)) { %>
-                            <a class="nav-link" href="/signup">
-                                <i class="fa-solid fa-user-plus"></i>&nbsp;&nbsp;<b>Sign up</b>
-                            </a>
-                            <a class="nav-link" href="/login">
-                                <i class="fa-solid fa-user-check"></i>&nbsp;&nbsp;<b>Log in</b>
-                            </a>
-                        <% } %>
-
-                        <% if(typeof currentUser !== 'undefined' && currentUser) { %>
-                            <h6 class="mt-1 nav-link"><b>
-                                <i class="fa-solid fa-user"></i>&nbsp; &nbsp;<%= currentUser.username %>
-                            </b></h6>
-                            <a class="nav-link" href="/logout">
-                                <i class="fa-solid fa-arrow-right-from-bracket"></i>&nbsp;<b>Log out</b>
-                            </a>
-                        <% } %>
-
-                        <a class="nav-link" href="/listings/new">
-                            <i class="fa-solid fa-circle-plus"></i>&nbsp; &nbsp;<strong>Airbnb your home</strong>
+                <!-- Responsive Registration (visible on smaller screens) -->
+                <div id="responsive-registration" class="d-none">
+                    <% if(!(typeof currentUser !=='undefined' && currentUser)) { %>
+                        <a class="nav-link" href="/signup">
+                            <i class="fa-solid fa-user-plus"></i>&nbsp;&nbsp;<b>Sign up</b>
                         </a>
-                    </div>
-                </ul>
-            </div>
+                        <a class="nav-link" href="/login">
+                            <i class="fa-solid fa-user-check"></i>&nbsp;&nbsp;<b>Log in</b>
+                        </a>
+                        <% } %>
+
+                            <% if(typeof currentUser !=='undefined' && currentUser) { %>
+                                <h6 class="mt-1 nav-link"><b>
+                                        <i class="fa-solid fa-user"></i>&nbsp; &nbsp;<%= currentUser.username %>
+                                    </b></h6>
+                                <a class="nav-link" href="/logout">
+                                    <i class="fa-solid fa-arrow-right-from-bracket"></i>&nbsp;<b>Log out</b>
+                                </a>
+                                <% } %>
+
+                                    <a class="nav-link" href="/listings/new">
+                                        <i class="fa-solid fa-circle-plus"></i>&nbsp; &nbsp;<strong>Airbnb your
+                                            home</strong>
+                                    </a>
+                </div>
+            </ul>
         </div>
-    </nav>
+    </div>
+</nav>

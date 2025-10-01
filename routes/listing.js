@@ -4,9 +4,8 @@ const wrapAsync = require("../utils/wrapAsync.js");
 const { isLoggedIn, isOwner, validateListing } = require("../middleware.js");
 const listingController = require("../controllers/listings.js");
 const multer = require("multer");
-const {storage} = require ("../cloudConfig.js");
-const upload = multer({storage})
-
+const { storage } = require("../cloudConfig.js");
+const upload = multer({ storage });
 
 // ------------------ ROUTES ------------------
 
@@ -18,7 +17,7 @@ router
   // POST → Create a new listing (with validations & image upload)
   .post(
     isLoggedIn,
-      upload.single("listing[image]"),
+    upload.single("listing[image]"),
     validateListing,
     wrapAsync(listingController.createListing)
   );
@@ -38,9 +37,9 @@ router
   .put(
     isLoggedIn, // must be logged in
     isOwner, // must be the owner of the listing
-     upload.single("listing[image]"),
-     validateListing,
-     wrapAsync(listingController.updateListing)
+    upload.single("listing[image]"),
+    validateListing,
+    wrapAsync(listingController.updateListing)
   )
   // DELETE → Remove a listing permanently
   .delete(isLoggedIn, isOwner, wrapAsync(listingController.deleteListing));

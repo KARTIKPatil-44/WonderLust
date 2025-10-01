@@ -2,9 +2,11 @@ const Listing = require("../models/listing");
 const mbxGeocoding = require("@mapbox/mapbox-sdk/services/geocoding");
 const mapToken = process.env.MAP_TOKEN;
 // Only create the client if a token is available to avoid runtime error
-const geocodingClient = mapToken ? mbxGeocoding({ accessToken: mapToken }) : null;
-const path = require('path');
-const fs = require('fs');
+const geocodingClient = mapToken
+  ? mbxGeocoding({ accessToken: mapToken })
+  : null;
+const path = require("path");
+const fs = require("fs");
 
 // ------------------ CONTROLLERS ------------------
 
@@ -60,9 +62,13 @@ module.exports.createListing = async (req, res, next) => {
   // 3) Attach image from upload
   try {
     if (req.file && (req.file.path || req.file.filename)) {
-      console.log('Processing uploaded file:', req.file);
+      console.log("Processing uploaded file:", req.file);
       // Cloudinary: req.file.path is a full URL; Local: serve from /uploads filename
-      const isCloudinary = !!(process.env.CLOUD_NAME && process.env.CLOUD_API_KEY && process.env.CLOUD_API_SECRET);
+      const isCloudinary = !!(
+        process.env.CLOUD_NAME &&
+        process.env.CLOUD_API_KEY &&
+        process.env.CLOUD_API_SECRET
+      );
       const imageUrl = isCloudinary
         ? req.file.path
         : `/uploads/${req.file.filename}`;
@@ -71,18 +77,17 @@ module.exports.createListing = async (req, res, next) => {
         url: imageUrl,
         filename: req.file.filename || "",
       };
-      console.log('Image attached successfully:', newListing.image);
+      console.log("Image attached successfully:", newListing.image);
     } else {
-      console.log('No file uploaded, using placeholder image');
+      console.log("No file uploaded, using placeholder image");
       // No upload provided → placeholder
       newListing.image = {
-        url:
-          "https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?q=80&w=1200&auto=format&fit=crop",
+        url: "https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?q=80&w=1200&auto=format&fit=crop",
         filename: "placeholder",
       };
     }
   } catch (error) {
-    console.error('Error processing image upload:', error);
+    console.error("Error processing image upload:", error);
     throw error;
   }
 
@@ -90,8 +95,7 @@ module.exports.createListing = async (req, res, next) => {
   newListing.owner = req.user._id;
 
   // 5) Ensure geometry is present to satisfy schema
-  newListing.geometry =
-    geometry ?? { type: "Point", coordinates: [0, 0] };
+  newListing.geometry = geometry ?? { type: "Point", coordinates: [0, 0] };
 
   // 6) Save and redirect
   await newListing.save();
@@ -128,7 +132,7 @@ module.exports.updateListing = async (req, res) => {
         const response = await geocodingClient
           .forwardGeocode({
             query: req.body.listing.location,
-            limit: 1
+            limit: 1,
           })
           .send();
         if (
@@ -166,34 +170,44 @@ module.exports.updateListing = async (req, res) => {
   // 3) If new image uploaded, update image too
   try {
     if (req.file) {
-      console.log('Processing updated file:', req.file);
-      const isCloudinary = !!(process.env.CLOUD_NAME && process.env.CLOUD_API_KEY && process.env.CLOUD_API_SECRET);
-      
+      console.log("Processing updated file:", req.file);
+      const isCloudinary = !!(
+        process.env.CLOUD_NAME &&
+        process.env.CLOUD_API_KEY &&
+        process.env.CLOUD_API_SECRET
+      );
+
       // Delete old image file if it exists (for local storage)
       if (!isCloudinary && listing.image && listing.image.filename) {
-        const oldImagePath = path.join(__dirname, '../public/uploads', listing.image.filename);
+        const oldImagePath = path.join(
+          __dirname,
+          "../public/uploads",
+          listing.image.filename
+        );
         if (fs.existsSync(oldImagePath)) {
           try {
             fs.unlinkSync(oldImagePath);
           } catch (err) {
-            console.error('Error deleting old image:', err);
+            console.error("Error deleting old image:", err);
             // Continue even if delete fails
           }
         }
       }
-      
+
       // Update with new image
-      const imageUrl = isCloudinary ? req.file.path : `/uploads/${req.file.filename}`;
+      const imageUrl = isCloudinary
+        ? req.file.path
+        : `/uploads/${req.file.filename}`;
       listing.image = {
         url: imageUrl,
-        filename: req.file.filename || ""
+        filename: req.file.filename || "",
       };
-      console.log('Updated image attached successfully:', listing.image);
-      listing.markModified('image');
+      console.log("Updated image attached successfully:", listing.image);
+      listing.markModified("image");
     }
   } catch (error) {
-    console.error('Error processing image update:', error);
-    req.flash('error', 'Failed to process image upload: ' + error.message);
+    console.error("Error processing image update:", error);
+    req.flash("error", "Failed to process image upload: " + error.message);
     return res.redirect(`/listings/${id}/edit`);
   }
 
@@ -204,90 +218,89 @@ module.exports.updateListing = async (req, res) => {
   res.redirect(`/listings/${listing._id}`);
 };
 
-module.exports.filter = async (req,res, next)=>{
-  let {id} = req.params;
-  
+module.exports.filter = async (req, res, next) => {
+  let { id } = req.params;
+
   // Handle category names with spaces and special characters
-  let categoryName = id.replace(/-/g, ' ');
-  
+  let categoryName = id.replace(/-/g, " ");
+
   let allListings = await Listing.find({
     $or: [
-      {category: {$in:[id]}},
-      {category: {$in:[categoryName]}},
-      {category: {$regex: id, $options: "i"}}
-    ]
+      { category: { $in: [id] } },
+      { category: { $in: [categoryName] } },
+      { category: { $regex: id, $options: "i" } },
+    ],
   });
-  
-  if(allListings.length !== 0){
+
+  if (allListings.length !== 0) {
     res.locals.success = `Listings Filtered by ${id}!`;
-    res.render("listings/index.ejs", {allListings});
-  }else {
+    res.render("listings/index.ejs", { allListings });
+  } else {
     req.flash("error", `There are no listings for ${id}!`);
     res.redirect("/listings");
   }
 };
 
-
-module.exports.search = async (req,res)=>{
+module.exports.search = async (req, res) => {
   let input = req.query.q.trim();
-  if(input === ""){
+  if (input === "") {
     req.flash("error", "Please enter search query!");
     return res.redirect("/listings");
   }
-  
+
   // Search in title first
   let allListings = await Listing.find({
-    title: {$regex: input, $options: "i"},
+    title: { $regex: input, $options: "i" },
   });
 
-  if(allListings.length !== 0){
+  if (allListings.length !== 0) {
     res.locals.success = "Listings searched by Title!";
-    res.render("listings/index.ejs",{allListings});
+    res.render("listings/index.ejs", { allListings });
     return;
   }
 
   // Search in category
   allListings = await Listing.find({
-    category: { $regex: input, $options: "i"},
-  }).sort({_id:-1});
-  
-  if(allListings.length !== 0){
+    category: { $regex: input, $options: "i" },
+  }).sort({ _id: -1 });
+
+  if (allListings.length !== 0) {
     res.locals.success = "Listings searched by Category!";
-    res.render("listings/index.ejs",{allListings});
+    res.render("listings/index.ejs", { allListings });
     return;
   }
 
   // Search in country
   allListings = await Listing.find({
-    country: { $regex: input, $options: "i"},
-  }).sort({_id: -1});
-  
-  if(allListings.length !== 0){
+    country: { $regex: input, $options: "i" },
+  }).sort({ _id: -1 });
+
+  if (allListings.length !== 0) {
     res.locals.success = "Listings searched by Country!";
-    res.render("listings/index.ejs",{allListings});
+    res.render("listings/index.ejs", { allListings });
     return;
   }
 
   // Search in location
   allListings = await Listing.find({
-    location: { $regex: input, $options: "i"},
-  }).sort({_id: -1});
-  
-  if(allListings.length !== 0){
+    location: { $regex: input, $options: "i" },
+  }).sort({ _id: -1 });
+
+  if (allListings.length !== 0) {
     res.locals.success = "Listings searched by Location!";
-    res.render("listings/index.ejs", {allListings});
+    res.render("listings/index.ejs", { allListings });
     return;
   }
 
   // Search by price if input is a number
   const intValue = parseInt(input, 10);
-  if(!isNaN(intValue) && intValue > 0){
-    allListings = await Listing.find({price: {$lte: intValue}}).sort({
+  if (!isNaN(intValue) && intValue > 0) {
+    allListings = await Listing.find({ price: { $lte: intValue } }).sort({
       price: 1,
     });
-    if(allListings.length !== 0){
+    if (allListings.length !== 0) {
       res.locals.success = `Listings searched by price less than Rs ${intValue}!`;
-      res.render("listings/index.ejs", {allListings});
+      res.render("listings/index.ejs", { allListings });
       return;
     }
   }
@@ -307,8 +320,8 @@ module.exports.deleteListing = async (req, res) => {
   res.redirect("/listings");
 };
 
-module.exports.reserveListing = async (req,res)=>{
-  let {id } = req.params;
+module.exports.reserveListing = async (req, res) => {
+  let { id } = req.params;
   req.flash("success", "Reservatrion Details is sent to you Email");
   res.redirect(`/listings/${id}`);
 };
